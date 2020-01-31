@@ -1,0 +1,149 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://img.icons8.com/plasticine/2x/worldwide-location.png">
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Bangers|Orbitron|Play|Roboto+Mono&display=swap" rel="stylesheet">
+    
+    <title>Bottom navbar example for Bootstrap</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/navbar-bottom/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="jumbotron mt-3 shadow">
+        <h1 style="font-family: 'Bangers', cursive;">L0cator</h1>
+        <p class="lead" style="font-family: 'Orbitron', sans-serif;">Track Someone By Link</p>
+        <a class="btn btn-lg btn-outline-primary" href="#" id="create-link-card-btn" role="button" style="font-family: 'Roboto Mono', monospace;">Create Link <i class="fa fa-link"></i></a>
+        <a class="btn btn-lg btn-outline-danger ml-2" href="#" id="trace-id-card-btn" role="button" style="font-family: 'Play', sans-serif;">Trace <i class="fa fa-map-marker"></i></a>
+        <br>
+
+        <div class="card mt-2 action-card" id="trace-id-card">
+            <div class="card-body shadow">
+              <h5 class="card-title">Enter Link ID: </h5>
+              <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+              <input type="text" class="form-control" id="link-id" placeholder="">
+              <br>
+              <button id="trace-id-card-cancel-btn" class="btn btn-outline-dark" onclick="hideActionCard()">Cancel</button>
+              <button id="trace-id-card-check-btn" class="btn btn-outline-success">Check</button>
+            </div>
+          </div>
+
+          <div class="card mt-2 action-card" id="create-link-card">
+            <div class="card-body shadow">
+              <h5 class="card-title">Your Tracing Link: </h5>
+              <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+              <input type="text" class="form-control" id="tracing-link" readonly>
+              <br>
+              <button id="create-link-card-cancel-btn" class="btn btn-outline-dark" onclick="hideActionCard()">Cancel</button>
+              <button id="create-link-card-check-btn" class="btn btn-outline-success" onclick="copyText()">Copy</button>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+    <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Locate</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item dropup">
+            <a class="nav-link dropdown-toggle" href="https://getbootstrap.com/" id="dropdown10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropup</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown10">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.1/dist/js/bootstrap.min.js"></script>
+    <script>
+      function hideActionCard(){
+        $(".action-card").hide(150);
+        $("#tracing-link").attr({"value": ""})
+        $("#link-id").attr({"value": ""})
+
+        
+
+      }
+      function copyText() {
+  /* Get the text field */
+  var copyText = document.getElementById("tracing-link");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("Copied the text: " + copyText.value);
+}
+
+        function createId(){
+            let link = ""
+            $.ajax({url: "/create_link/", success: function(result){
+                // $("#div1").html(result);
+                // console.log(result)
+                link = window.location.host + result
+                $("#tracing-link").attr({"value": link})
+
+            }});
+            return link;
+        }
+        $(document).ready(function(){
+            $("#trace-id-card").hide();
+            $("#create-link-card").hide();
+
+            $("#trace-id-card-btn").click(function(){
+                // alert("click")
+                $("#create-link-card").hide(200);
+
+                $("#trace-id-card").slideToggle(200);
+            });
+            $("#create-link-card-btn").click(function(){
+              if ( $("#create-link-card").css('display') == 'none' || $("#create-link-card").css("visibility") == "hidden"){
+    // element is hidden
+                console.log(createId())
+              }
+              $("#trace-id-card").hide(200);
+
+                $("#create-link-card").slideToggle(200);
+            });
+        });
+    </script>
+  </body>
+</html>

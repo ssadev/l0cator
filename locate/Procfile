@@ -1,0 +1,1 @@
+web: gunicorn l0cator.wsgi --log-file -
