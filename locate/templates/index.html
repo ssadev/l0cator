@@ -221,6 +221,8 @@
               let date = rows[index]['date']
               let ip = replaceAll(rows[index]['recorde'], "'", '"')
               ip = replaceAll(ip, "False", "false")
+              ip = replaceAll(ip, "True", "true")
+
               console.log(ip)
               ip = JSON.parse(ip)
               let latitude = ip['latitude']
