@@ -36,7 +36,7 @@
               <input type="text" class="form-control" id="link-id" placeholder="">
               <br>
               <button id="trace-id-card-cancel-btn" class="btn btn-outline-dark" onclick="hideActionCard()">Cancel</button>
-              <button id="trace-id-card-check-btn" class="btn btn-outline-success">Check</button>
+              <button id="trace-id-card-check-btn" class="btn btn-outline-success" onclick="Trace()">Check</button>
             </div>
           </div>
 
@@ -50,9 +50,50 @@
               <button id="create-link-card-check-btn" class="btn btn-outline-success" onclick="copyText()">Copy</button>
             </div>
           </div>
+          <br>
 
+          <div class="card mt-2 " >
+            <div class="card-body shadow" id="recorde-table-container">
+              <h5 class="card-title">Recordes Table</h5>
+              <h6 class="card-subtitle mb-2 text-muted">for ID: <span id="table-id-show"></span></h6>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">Deatils</th>
+                  </tr>
+                </thead>
+                <tbody id="recorde-table-body">
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
       </div>
     </div>
+
+
+
+    <!-- Large modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title h4" id="myLargeModalLabel">Large modal</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
       <a class="navbar-brand" href="#">Locate</a>
@@ -81,6 +122,9 @@
         </ul>
       </div>
     </nav>
+
+
+    
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -125,6 +169,7 @@
             return link;
         }
         $(document).ready(function(){
+          $("#recorde-table-container").hide(); // # Recorde Table 
             $("#trace-id-card").hide();
             $("#create-link-card").hide();
 
@@ -144,6 +189,57 @@
                 $("#create-link-card").slideToggle(200);
             });
         });
+
+        function Trace() {
+          let linkId = $("#link-id").val()
+          if(linkId != null){
+            url = "/recorde/"+linkId
+            $.ajax({url: url, success: function(result){
+              let data = JSON.parse(result);
+              $("#table-id-show").text(linkId)
+
+                  renderRecordes(data)
+                  $("#recorde-table-container").show('150'); // # Recorde Table 
+
+              }});
+          }
+          // console.log(linkId)
+        }
+
+        function renderRecordes(data) {
+          if(data['recorde'] == 0){
+            // console.log(data['data'])
+          }else{
+            // console.log(data)
+            let rows = data['data']
+            let rowLength = rows.length
+            let html = ""
+            
+            for (let index = 0; index < rowLength; index++) {
+              let link_id = rows[index]['link_id']
+              let ip = replaceAll(rows[index]['recorde'], "'", '"')
+              ip = replaceAll(ip, "False", "false")
+              console.log(ip)
+              ip = JSON.parse(ip)
+              let latitude = ip['latitude']
+              let longitude = ip['longitude']
+              ip = ip['ip']
+              
+              let mapUrl = "https://tools.keycdn.com/geo?host="+ip
+              
+              console.log(ip)
+              html += '<tr> <td>'+link_id+'</td> <td>'+ip+'</td> <td><a href="'+mapUrl+'" class="btn btn-info" detail="'+index+'" target="_blank"><i class="fa fa-info-circle" ></i></a></td> </tr>'
+              // console.log(JSON.parse(replaceAll(rows[index]['recorde'], "'", '"')))
+            }
+            $("#recorde-table-body").html(html)
+            // console.log(rows.length, rows)
+          }
+          
+        }
+
+        function replaceAll(str, find, replace) {
+          return str.replace(new RegExp(find, 'g'), replace);
+        }
     </script>
   </body>
 </html>
