@@ -61,6 +61,7 @@
                   <tr>
                     <th scope="col">ID</th>
                     <th scope="col">IP</th>
+                    <th scope="col">Date&Time</th>
                     <th scope="col">Deatils</th>
                   </tr>
                 </thead>
@@ -76,7 +77,7 @@
 
 
     <!-- Large modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -92,7 +93,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 
     <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
@@ -217,18 +218,20 @@
             
             for (let index = 0; index < rowLength; index++) {
               let link_id = rows[index]['link_id']
+              let date = rows[index]['date']
               let ip = replaceAll(rows[index]['recorde'], "'", '"')
               ip = replaceAll(ip, "False", "false")
               console.log(ip)
               ip = JSON.parse(ip)
               let latitude = ip['latitude']
               let longitude = ip['longitude']
+              
               ip = ip['ip']
               
               let mapUrl = "https://tools.keycdn.com/geo?host="+ip
               
               console.log(ip)
-              html += '<tr> <td>'+link_id+'</td> <td>'+ip+'</td> <td><a href="'+mapUrl+'" class="btn btn-info" detail="'+index+'" target="_blank"><i class="fa fa-info-circle" ></i></a></td> </tr>'
+              html += '<tr> <td>'+link_id+'</td> <td>'+ip+'</td> <td>'+date+'</td> <td><a href="'+mapUrl+'" class="btn btn-info" detail="'+index+'" target="_blank"><i class="fa fa-info-circle" ></i></a></td> </tr>'
               // console.log(JSON.parse(replaceAll(rows[index]['recorde'], "'", '"')))
             }
             $("#recorde-table-body").html(html)

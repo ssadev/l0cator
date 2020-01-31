@@ -48,7 +48,7 @@ def recorde(request, link_id):
         recs = Recordes.objects.all().filter(link_id=link_id)
         recordeData = []
         for rec in recs:
-            recordeData.append({'link_id': rec.link_id, 'recorde': rec.recorde})
+            recordeData.append({'link_id': rec.link_id, 'date': str(rec.date), 'recorde': rec.recorde})
         data = {"recorde": len(recorde), "data": recordeData}
     else:
         data = {"recorde": 0}
