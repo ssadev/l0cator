@@ -22,7 +22,7 @@ def trace(request, link_id):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
-            city = g.city(ip)['city']
+            # city = g.city(ip)['city']
         else:
             ip = request.META.get('REMOTE_ADDR')
         print(link, "\n", ip)
